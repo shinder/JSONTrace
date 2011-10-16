@@ -1,0 +1,7 @@
+h2. JSONTrace Changelog:
+
+h3. v0.5 - Just the start - 2011-10-17
+
+* JSONTrace is an ActionScript 3 mini library for tracing JSON format strings by using the com.adobe.serialization.json package.
+* JSONTrace depends on "as3corelib":https://github.com/mikechambers/as3corelib (com.adobe.serialization.json package) library.
+* JSONTrace is easy to use, put the swc file in your class path, and call @jsonTrace( yourObject )@
