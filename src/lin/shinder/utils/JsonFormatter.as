@@ -1,17 +1,24 @@
 package lin.shinder.utils 
 {
 	/**
-	 * @date	2011-10-16
+	 * @date	2012-03-29
 	 * @author	shinder.lin@gmail.com
 	 */
 	public class JsonFormatter
 	{
 		private var spaces:int;
-		private var spaceUnit:String = " ";
+		public static var spaceUnit:String = " ";
 		private var resultStr:String = "";
 		private var prevCh:String;
 		
+		private var pieces:Array;
+		private var currentIndex:int;
+		private var lastStepIndex:int;
+		
 		public function JsonFormatter(str:String = null) {
+			spaces = 0;
+			lastStepIndex = 0;
+			pieces = [];
 			if (str) {
 				findBracket( str );
 			}
@@ -30,61 +37,63 @@ package lin.shinder.utils
 			var midStr:String;
 			var rightStr:String;
 			
-			for (var i:int = 0; i < str.length; i++) {
+			for (var i:int = 0; i < str.length; i++)
+			{
 				ch = str.charAt(i);
-				
-				if ( ch == '[' || ch == '{' || ch == ',' ) {
-					leftStr = str.slice(0, i + 1);
-					rightStr = str.slice(i + 1);
-					break;
-				} else if ( ch == '}' || ch == ']' ) {
-					leftStr = str.slice(0, i);
-					midStr = str.slice(i, i+1);
-					rightStr = str.slice(i+1);
-					break;
-				} 
-			}
-			if (leftStr == null) {
-				return;
-			}
-			if (ch == ',' && (prevCh=='}' || prevCh==']')) {
-				resultStr += leftStr;
-			} else {
-				resultStr += getSpaces() + leftStr;
-			}
-			switch(ch) {
-				case '[':
-					spaces ++;
-					break;
-				case '{':
-					spaces ++;
-					break;
-				case '}':
-					spaces --;
-					break;
-				case ']':
-					spaces --;
-					break;
-			}
-			
-			if (midStr != null) {
-				resultStr += getSpaces() + midStr;
-			}
-			prevCh = ch;
-			
-			if(rightStr.length>1) {
-				findBracket( rightStr );
-			} else {
-				resultStr += "\n" + rightStr;
-			}
+				if ( ch == '[' || ch == '{' || ch == ',' || ch == '}' || ch == ']' )
+				{
+					if ( ch == '[' || ch == '{' || ch == ',' ) {
+						leftStr = str.slice(lastStepIndex, i + 1);
+						midStr = null;
+						lastStepIndex = i+1;
+
+					} else if ( ch == '}' || ch == ']' ) {
+						leftStr = str.slice(lastStepIndex, i);
+						midStr = str.slice(i, i+1);
+						lastStepIndex = i+1;
+					}
+					
+					if (ch == ',' && (prevCh=='}' || prevCh==']')) {
+						pieces.push( leftStr );
+
+					} else {
+						addSpaces();
+						pieces.push( leftStr );
+					}
+					
+					switch(ch) {
+						case '[':
+							spaces ++;
+							break;
+						case '{':
+							spaces ++;
+							break;
+						case '}':
+							spaces --;
+							break;
+						case ']':
+							spaces --;
+							break;
+					}
+					
+					if (midStr != null) {
+						addSpaces();
+						pieces.push( midStr );
+					}
+
+					prevCh = ch;
+				}	// end if
+
+			}	// end for
+
+			resultStr = pieces.join('');
 		}
 		
-		private function getSpaces():String {
-			var str:String = "\n";
+		private function addSpaces():void {
+			pieces.push( '\n' );
 			for (var i:int = 0; i < spaces; i++){
-				str += spaceUnit;
+				pieces.push( spaceUnit );
 			}
-			return str;
 		}
 	}
 }

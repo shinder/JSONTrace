@@ -1,5 +1,7 @@
 h2. JSONTrace Changelog:
 
+h3. v0.6 - bugs fixed - 2012-03-29
+
 h3. v0.5 - Just the start - 2011-10-17
 
 * JSONTrace is an ActionScript 3 mini library for tracing JSON format strings by using the com.adobe.serialization.json package.
