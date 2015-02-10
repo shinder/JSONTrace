@@ -2,7 +2,7 @@ package lin.shinder.utils
 {
 	/**
 	 * @date	2011-10-16
-	 * @author	shinder.lin@gmail.com
+	 * @author	shinder.lin@gmail.com -
 	 */
 	import com.adobe.serialization.json.JSON;
 	
